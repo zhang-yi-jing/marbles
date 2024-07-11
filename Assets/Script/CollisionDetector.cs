@@ -87,17 +87,17 @@ public class CollisionDetector : MonoBehaviour
         if (proximityPercentage <= 0.35f)
         {
             rotationSpeed = 90f;
-            tangentSpeed = 5f;
+            tangentSpeed = 3f;
         }
         else if (proximityPercentage <= 0.55f)
         {
             rotationSpeed = 150f;
-            tangentSpeed = 3f;
+            tangentSpeed = 5f;
         }
         else
         {
             rotationSpeed = 240f;
-            tangentSpeed = 1f;
+            tangentSpeed = 8f;
         }
 
 

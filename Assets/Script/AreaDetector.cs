@@ -4,7 +4,12 @@ public class AreaDetector : MonoBehaviour
 {
     public GameObject targetObject;
     public GameObject areaObject;
+    public GameObject menu;
 
+    private void Start()
+    {
+        menu.SetActive(false);
+    }
     private void Update()
     {
         DetectInArea();
@@ -37,6 +42,12 @@ public class AreaDetector : MonoBehaviour
         else
         {
             Debug.Log($"{targetObject.name} is outside the area of {areaObject.name}.");
+            ActivateTargetObject();
         }
+    }
+
+    private void ActivateTargetObject()
+    {
+        menu.SetActive(true); // 激活目标物体
     }
 }
