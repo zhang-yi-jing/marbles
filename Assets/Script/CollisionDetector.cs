@@ -23,10 +23,10 @@ public class CollisionDetector : MonoBehaviour
             isInTriggerRange = true;
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // 获取触发物体的半径
-            Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
-            Debug.Log(isInTriggerRange);
-            Debug.Log(isRotating);
-            Debug.Log(isShooting);
+            //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
+            //Debug.Log(isInTriggerRange);
+            //Debug.Log(isRotating);
+            //Debug.Log(isShooting);
             
         }
     }
@@ -83,11 +83,11 @@ public class CollisionDetector : MonoBehaviour
 
         if (proximityPercentage <= 0.35f)
         {
-            rotationSpeed = 120f;
+            rotationSpeed = 90f;
         }
         else if (proximityPercentage <= 0.55f)
         {
-            rotationSpeed = 180f;
+            rotationSpeed = 150f;
         }
         else
         {
@@ -104,6 +104,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void CalculateProximityPercentage()
     {
+        rb.gravityScale = 0;
         // 计算物体与colliderPosition之间的距离
         float distance = Vector2.Distance(transform.position, colliderPosition);
 
@@ -116,7 +117,7 @@ public class CollisionDetector : MonoBehaviour
         // 输出百分比
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
 
-        float linearDrag = Mathf.Lerp(5f, 15f, proximityPercentage);
+        float linearDrag = Mathf.Lerp(1f, 5f, proximityPercentage);
         //Debug.Log(linearDrag);
         rb.drag = linearDrag;
     }
@@ -125,9 +126,10 @@ public class CollisionDetector : MonoBehaviour
     {
         // 计算切线方向
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
-
+        rb.gravityScale = 0.2f;
         // 应用切线速度
         float tangentSpeed = 5f; // 切线速度大小
         rb.velocity = -tangentDirection * tangentSpeed;
+        
     }
 }
