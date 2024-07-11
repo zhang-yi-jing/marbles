@@ -10,6 +10,7 @@ public class CollisionDetector : MonoBehaviour
     private Rigidbody2D rb;
     private bool isShooting = false;
     private float proximityPercentage;
+    private float tangentSpeed;
 
     private void Start()
     {
@@ -37,6 +38,7 @@ public class CollisionDetector : MonoBehaviour
         {
             isInTriggerRange = false;
             isShooting = false;
+            tangentSpeed = 0f;
         }
     }
 
@@ -84,14 +86,17 @@ public class CollisionDetector : MonoBehaviour
         if (proximityPercentage <= 0.35f)
         {
             rotationSpeed = 90f;
+            tangentSpeed = 5f;
         }
         else if (proximityPercentage <= 0.55f)
         {
             rotationSpeed = 150f;
+            tangentSpeed = 3f;
         }
         else
         {
             rotationSpeed = 240f;
+            tangentSpeed = 1f;
         }
 
 
@@ -128,8 +133,6 @@ public class CollisionDetector : MonoBehaviour
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
         rb.gravityScale = 0.2f;
         // 应用切线速度
-        float tangentSpeed = 5f; // 切线速度大小
         rb.velocity = -tangentDirection * tangentSpeed;
-        
     }
 }
