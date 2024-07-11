@@ -4,16 +4,16 @@ public class CollisionDetector : MonoBehaviour
 {
     private bool isInTriggerRange = false;
     private Vector2 colliderPosition;
-    private float rotationSpeed; // Ã¿ÃëÐý×ªµÄ½Ç¶È
+    private float rotationSpeed; // Ã¿ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä½Ç¶ï¿½
     private bool isRotating = false;
-    private float triggerRadius = 0f; // ´¥·¢ÇøÓòµÄ°ë¾¶
+    private float triggerRadius = 0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä°ë¾¶
     private Rigidbody2D rb;
     private bool isShooting = false;
     private float proximityPercentage;
 
     private void Start()
     {
-        // »ñÈ¡¹ÒÔØ¸Ã½Å±¾µÄÎïÌåµÄRigidbody2D×é¼þ
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ø¸Ã½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rigidbody2Dï¿½ï¿½ï¿½
         rb = GetComponent<Rigidbody2D>();
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -22,7 +22,7 @@ public class CollisionDetector : MonoBehaviour
         {
             isInTriggerRange = true;
             colliderPosition = other.transform.position;
-            triggerRadius = other.bounds.extents.x; // »ñÈ¡´¥·¢ÎïÌåµÄ°ë¾¶
+            triggerRadius = other.bounds.extents.x; // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä°ë¾¶
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
 
         }
@@ -32,6 +32,7 @@ public class CollisionDetector : MonoBehaviour
     {
         if (other.CompareTag("Trigger range"))
         {
+            Debug.Log("Exited Trigger Range: " + other.gameObject.name);
             isInTriggerRange = false;
             
         }
@@ -49,9 +50,9 @@ public class CollisionDetector : MonoBehaviour
         {
             if (!isRotating)
             {
-                // ½ûÓÃÎïÌåÉÏµÄRigidbody×é¼þ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Rigidbodyï¿½ï¿½ï¿½
                 rb.isKinematic = true;
-                rb.velocity = Vector2.zero; // ½«ËÙ¶ÈÉèÖÃÎªÁã
+                rb.velocity = Vector2.zero; // ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
                 RotateAroundColliderPosition();
                 Debug.Log(rb.velocity);
                 isShooting = false;
@@ -76,7 +77,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void RotateAroundColliderPosition()
     {
-        // »ñÈ¡¹ÒÔØÓÐ¸Ã½Å±¾µÄÎïÌå
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ð¸Ã½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Transform thisTransform = transform;
 
         if (proximityPercentage <= 0.35f)
@@ -93,25 +94,25 @@ public class CollisionDetector : MonoBehaviour
         }
 
 
-        // ¼ÆËãÃ¿Ö¡Ó¦¸ÃÐý×ªµÄ½Ç¶È
+        // ï¿½ï¿½ï¿½ï¿½Ã¿Ö¡Ó¦ï¿½ï¿½ï¿½ï¿½×ªï¿½Ä½Ç¶ï¿½
         float deltaAngle = rotationSpeed * Time.deltaTime;
 
-        // ½øÐÐÐý×ª
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
         thisTransform.RotateAround(colliderPosition, Vector3.forward, deltaAngle);
     }
 
     private void CalculateProximityPercentage()
     {
-        // ¼ÆËãÎïÌåÓëcolliderPositionÖ®¼äµÄ¾àÀë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½colliderPositionÖ®ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½
         float distance = Vector2.Distance(transform.position, colliderPosition);
 
-        // ¼ÆËã°Ù·Ö±È
+        // ï¿½ï¿½ï¿½ï¿½Ù·Ö±ï¿½
         proximityPercentage = 1f - (distance / triggerRadius);
 
-        // ½«°Ù·Ö±ÈÏÞÖÆÔÚ0-100%Ö®¼ä
+        // ï¿½ï¿½ï¿½Ù·Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0-100%Ö®ï¿½ï¿½
         proximityPercentage = Mathf.Clamp(proximityPercentage, 0f, 1f);
 
-        // Êä³ö°Ù·Ö±È
+        // ï¿½ï¿½ï¿½ï¿½Ù·Ö±ï¿½
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
 
         float linearDrag = Mathf.Lerp(5f, 15f, proximityPercentage);
@@ -121,11 +122,11 @@ public class CollisionDetector : MonoBehaviour
 
     private void ApplyTangentVelocity()
     {
-        // ¼ÆËãÇÐÏß·½Ïò
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß·ï¿½ï¿½ï¿½
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
 
-        // Ó¦ÓÃÇÐÏßËÙ¶È
-        float tangentSpeed = 5f; // ÇÐÏßËÙ¶È´óÐ¡
+        // Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+        float tangentSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È´ï¿½Ð¡
         rb.velocity = -tangentDirection * tangentSpeed;
     }
 }
