@@ -24,7 +24,10 @@ public class CollisionDetector : MonoBehaviour
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // 获取触发物体的半径
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
-
+            Debug.Log(isInTriggerRange);
+            Debug.Log(isRotating);
+            Debug.Log(isShooting);
+            
         }
     }
 
@@ -33,7 +36,7 @@ public class CollisionDetector : MonoBehaviour
         if (other.CompareTag("Trigger range"))
         {
             isInTriggerRange = false;
-            
+            isShooting = false;
         }
     }
 
@@ -54,7 +57,6 @@ public class CollisionDetector : MonoBehaviour
                 rb.velocity = Vector2.zero; // 将速度设置为零
                 RotateAroundColliderPosition();
                 Debug.Log(rb.velocity);
-                isShooting = false;
             }
 
             isRotating = !isRotating;
