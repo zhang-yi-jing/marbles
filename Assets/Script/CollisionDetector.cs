@@ -23,8 +23,11 @@ public class CollisionDetector : MonoBehaviour
             isInTriggerRange = true;
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // ��ȡ��������İ뾶
-            Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
-
+            //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
+            //Debug.Log(isInTriggerRange);
+            //Debug.Log(isRotating);
+            //Debug.Log(isShooting);
+            
         }
     }
 
@@ -34,7 +37,7 @@ public class CollisionDetector : MonoBehaviour
         {
             Debug.Log("Exited Trigger Range: " + other.gameObject.name);
             isInTriggerRange = false;
-            
+            isShooting = false;
         }
     }
 
@@ -55,7 +58,6 @@ public class CollisionDetector : MonoBehaviour
                 rb.velocity = Vector2.zero; // ���ٶ�����Ϊ��
                 RotateAroundColliderPosition();
                 Debug.Log(rb.velocity);
-                isShooting = false;
             }
 
             isRotating = !isRotating;
@@ -82,11 +84,11 @@ public class CollisionDetector : MonoBehaviour
 
         if (proximityPercentage <= 0.35f)
         {
-            rotationSpeed = 120f;
+            rotationSpeed = 90f;
         }
         else if (proximityPercentage <= 0.55f)
         {
-            rotationSpeed = 180f;
+            rotationSpeed = 150f;
         }
         else
         {
@@ -103,6 +105,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void CalculateProximityPercentage()
     {
+        rb.gravityScale = 0;
         // ����������colliderPosition֮��ľ���
         float distance = Vector2.Distance(transform.position, colliderPosition);
 
@@ -115,7 +118,7 @@ public class CollisionDetector : MonoBehaviour
         // ����ٷֱ�
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
 
-        float linearDrag = Mathf.Lerp(5f, 15f, proximityPercentage);
+        float linearDrag = Mathf.Lerp(1f, 5f, proximityPercentage);
         //Debug.Log(linearDrag);
         rb.drag = linearDrag;
     }
@@ -124,9 +127,10 @@ public class CollisionDetector : MonoBehaviour
     {
         // �������߷���
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
-
+        rb.gravityScale = 0.2f;
         // Ӧ�������ٶ�
         float tangentSpeed = 5f; // �����ٶȴ�С
         rb.velocity = -tangentDirection * tangentSpeed;
+        
     }
 }
