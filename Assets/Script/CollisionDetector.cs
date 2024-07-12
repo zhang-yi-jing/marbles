@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class CollisionDetector : MonoBehaviour
 {
+    public GameObject onExitEffect;
+    public GameObject onEnterEffect;
+    public GameObject onTimeScaleEffect;
     private bool isInTriggerRange = false;
     private Vector2 colliderPosition;
     private float rotationSpeed; // ÿ����ת�ĽǶ�
     private bool isRotating = false;
-    private float triggerRadius = 0f; // ��������İ뾶
+    private float triggerRadius = 0f; // ��������İ�?
     private Rigidbody2D rb;
     private bool isShooting = false;
     private bool isSpace = false;
@@ -23,12 +26,11 @@ public class CollisionDetector : MonoBehaviour
 	public float outter_rotation = 150f;
 	public float outter_tangent = 5f;
 
-    
-	private bool isCanPlay = true;
+    private bool isCanPlay = true;
 
     private void Start()
     {
-        // ��ȡ���ظýű��������Rigidbody2D���
+        // ��ȡ���ظýű��������Rigidbody2D���?
         rb = GetComponent<Rigidbody2D>();
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -37,7 +39,7 @@ public class CollisionDetector : MonoBehaviour
         {
             isInTriggerRange = true;
             colliderPosition = other.transform.position;
-            triggerRadius = other.bounds.extents.x; // ��ȡ��������İ뾶
+            triggerRadius = other.bounds.extents.x; // ��ȡ��������İ�?
             enterVelocity = rb.velocity.magnitude;
             resistance = enterVelocity + 3f;
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + ", Velocity: " + enterVelocity);
@@ -100,47 +102,47 @@ public class CollisionDetector : MonoBehaviour
         {
             CalculateProximityPercentage();
         }
-		else
-		{
-			isCanPlay = true;
-		}
-        
+        else
+        {
+            isCanPlay = true;
+        }
+
 
         if (isInTriggerRange && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
             isSpace = true;
             if (!isRotating)
             {
-				AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[3], false);
-
-                // ���������ϵ�Rigidbody���
+                AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3], false);
+                ApplyParticle(onEnterEffect, false);
+                // ���������ϵ�Rigidbody���?
                 rb.isKinematic = true;
                 rb.velocity = Vector2.zero; // ���ٶ�����Ϊ��
                 RotateAroundColliderPosition();
                 //Debug.Log(rb.velocity);
             }
-			
+
             isRotating = !isRotating;
 
             if (!isRotating)
             {
+                ApplyParticle(onExitEffect, true);
                 rb.isKinematic = false;
                 rb.drag = 0.2f;
                 ApplyTangentVelocity();
                 isShooting = !isShooting;
-            }   
+            }
         }
 
         if (isRotating)
         {
-            RotateAroundColliderPosition();            
-			AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[2]);
-
+            RotateAroundColliderPosition();
+            AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[2]);
         }
-		else
-		{
-			AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[2]);
-		}
+        else
+        {
+            AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[2]);
+        }
     }
 
     private void RotateAroundColliderPosition()
@@ -179,25 +181,26 @@ public class CollisionDetector : MonoBehaviour
     private void CalculateProximityPercentage()
     {
         rb.gravityScale = 0;
-        // ����������colliderPosition֮��ľ���
+        // ����������colliderPosition֮��ľ���?
         float distance = Vector2.Distance(transform.position, colliderPosition);
 
-        // ����ٷֱ�
+        // ����ٷֱ�?
         proximityPercentage = 1f - (distance / triggerRadius);
 
         // ���ٷֱ�������0-100%֮��
         proximityPercentage = Mathf.Clamp(proximityPercentage, 0f, 1f);
-		//if proximityPercentage > 0.35f, PlayOneShot(AudioList.Instance.audioClips[0]);
-		if (proximityPercentage > 0.05f)
-		{
-			if (isCanPlay)
-			{
-				AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[1]);
-				isCanPlay = false;
-			}
-		} 
+        //if proximityPercentage > 0.35f, PlayOneShot(AudioList.Instance.audioClips[0]);
+        if (proximityPercentage > 0.05f)
+        {
+            if (isCanPlay)
+            {
+                ApplyParticle(onTimeScaleEffect, true);
+                AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[1]);
+                isCanPlay = false;
+            }
+        }
 
-        // ����ٷֱ�
+        // ����ٷֱ�?
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
 
         float linearDrag = Mathf.Lerp(1f, resistance, proximityPercentage);
@@ -207,7 +210,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void ApplyTangentVelocity()
     {
-		AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[0]);
+        AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[0]);
         // �������߷���
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
         rb.gravityScale = 0.2f;
@@ -224,5 +227,12 @@ public class CollisionDetector : MonoBehaviour
         
 
         
+    }
+
+    public void ApplyParticle(GameObject m_particle, bool isParent)
+    {
+        GameObject particle = Instantiate(m_particle, transform.position, Quaternion.identity);// create particle
+        if (isParent)
+            particle.transform.SetParent(transform);
     }
 }
