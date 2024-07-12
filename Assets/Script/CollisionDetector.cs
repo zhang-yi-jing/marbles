@@ -5,7 +5,8 @@ public class CollisionDetector : MonoBehaviour
     public GameObject onExitEffect;
     public GameObject onEnterEffect;
     public GameObject onTimeScaleEffect;
-    private bool isInTriggerRange = false;
+	public GameObject onHitWall;
+    public bool isInTriggerRange = false;
     private Vector2 colliderPosition;
     private float rotationSpeed; // ÿ����ת�ĽǶ�
     private bool isRotating = false;
@@ -55,6 +56,15 @@ public class CollisionDetector : MonoBehaviour
 
             float angle = Mathf.Atan2(relativePosition.y, relativePosition.x) - Mathf.Atan2(movementDirection.y, movementDirection.x);
             angle = Mathf.Rad2Deg * angle;
+			//如果角度超过180度，减去360度
+			if (angle > 180)
+			{
+			angle -= 360;
+            }
+            else if (angle < -180)
+            {
+                angle += 360;
+			}
             Debug.Log("Angle between relative position and movement direction: " + angle + " degrees.");
             if (angle >= 0)
             {
@@ -95,7 +105,8 @@ public class CollisionDetector : MonoBehaviour
     {
 		if(!isInTriggerRange)
 		{
-			AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[3]);
+			//AudioManager.Instance.KillthisAudio(AudioList.Instance.audioClips[3]);
+			Debug.Log("Kill");
 		}
 		
         if (isInTriggerRange && !isRotating && !isShooting)
@@ -113,7 +124,7 @@ public class CollisionDetector : MonoBehaviour
             isSpace = true;
             if (!isRotating)
             {
-                AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3], false);
+                AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3], true);
                 ApplyParticle(onEnterEffect, false);
                 // ���������ϵ�Rigidbody���?
                 rb.isKinematic = true;
@@ -210,7 +221,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void ApplyTangentVelocity()
     {
-        AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[0]);
+        AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[0],true);
         // �������߷���
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
         rb.gravityScale = 0.2f;
@@ -228,6 +239,14 @@ public class CollisionDetector : MonoBehaviour
 
         
     }
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+	    if (collision.gameObject.CompareTag("Wall"))
+        {
+            ApplyParticle(onHitWall, false);
+        }
+	}
 
     public void ApplyParticle(GameObject m_particle, bool isParent)
     {

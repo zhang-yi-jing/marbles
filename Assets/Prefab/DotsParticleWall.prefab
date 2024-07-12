@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1349292133090453612}
   - component: {fileID: 1061899533002431238}
   m_Layer: 0
-  m_Name: DotsParticle
+  m_Name: DotsParticleWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,7 +285,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -977,8 +977,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 100
-        minScalar: 20
+        scalar: 20
+        minScalar: 5
         maxCurve:
           serializedVersion: 2
           m_Curve:

@@ -35,7 +35,7 @@ public class AudioManager : MonosingletonTemp<AudioManager>
         }
     }
 
-    public void PlayOneShot(AudioClip clip, bool isRepeat = false)
+    public void PlayOneShot(AudioClip clip, bool isRepeat = false, bool isMultiple=false)
     {
         if (isRepeat || !currentlyPlayingClips.Contains(clip))
         {
@@ -81,6 +81,15 @@ public class AudioManager : MonosingletonTemp<AudioManager>
     {
         return audioSources.TryGetValue(clip, out AudioSource source) && source.isPlaying;
     }
+
+	public void KillthisAudio(AudioClip clip)
+	{
+	    if (audioSources.TryGetValue(clip, out AudioSource source))
+		    {
+            Destroy(source.gameObject);
+            audioSources.Remove(clip);
+        	}
+	}
 
     private void RecycleAudioSource(AudioClip clip)
     {
