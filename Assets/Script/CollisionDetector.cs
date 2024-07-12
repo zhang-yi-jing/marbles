@@ -14,6 +14,7 @@ public class CollisionDetector : MonoBehaviour
     private float tangentSpeed;
     private float enterVelocity;
     private float resistance;
+    private bool isCW;//CW是顺时针，CCW是逆时针
 
     private void Start()
     {
@@ -31,6 +32,26 @@ public class CollisionDetector : MonoBehaviour
             resistance = enterVelocity + 3f;
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + ", Velocity: " + enterVelocity);
             //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
+            // 获取物体相对于范围物体的相对位置坐标
+            Vector2 relativePosition = (Vector2)transform.position - (Vector2)colliderPosition;
+            relativePosition = -relativePosition;
+            Debug.Log("Relative Position: " + relativePosition);
+
+            // 检测物体运动的方向
+            Vector2 movementDirection = rb.velocity.normalized;
+            Debug.Log("Movement Direction: " + movementDirection);
+
+            float angle = Mathf.Atan2(relativePosition.y, relativePosition.x) - Mathf.Atan2(movementDirection.y, movementDirection.x);
+            angle = Mathf.Rad2Deg * angle;
+            Debug.Log("Angle between relative position and movement direction: " + angle + " degrees.");
+            if (angle >= 0)
+            {
+                isCW = false;
+            }
+            else
+            {
+                isCW = true;
+            }
             //Debug.Log(isInTriggerRange);
             //Debug.Log(isRotating);
             //Debug.Log(isShooting);
@@ -115,7 +136,10 @@ public class CollisionDetector : MonoBehaviour
             rotationSpeed = 240f;
             tangentSpeed = 8f;
         }
-
+        if (isCW)
+        {
+            rotationSpeed = -rotationSpeed;
+        }
 
         // ����ÿ֡Ӧ����ת�ĽǶ�
         float deltaAngle = rotationSpeed * Time.deltaTime;
@@ -150,6 +174,17 @@ public class CollisionDetector : MonoBehaviour
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
         rb.gravityScale = 0.2f;
         // Ӧ�������ٶ�
-        rb.velocity = -tangentDirection * tangentSpeed;
+
+        if (!isCW)
+        {
+            rb.velocity = -tangentDirection * tangentSpeed;
+        }
+        else
+        {
+            rb.velocity = tangentDirection * tangentSpeed;
+        }
+        
+
+        
     }
 }
