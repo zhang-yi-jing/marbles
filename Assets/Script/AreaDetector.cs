@@ -1,4 +1,4 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 
 public class AreaDetector : MonoBehaviour
 {
@@ -17,23 +17,23 @@ public class AreaDetector : MonoBehaviour
 
     private void DetectInArea()
     {
-        // 获取 targetObject 和 areaObject 的 Transform 信息
+        // ??? targetObject ?? areaObject ?? Transform ???
         Transform targetTransform = targetObject.transform;
         Transform areaTransform = areaObject.transform;
 
-        // 获取 targetObject 和 areaObject 的尺寸
+        // ??? targetObject ?? areaObject ????
         Vector3 targetSize = targetObject.GetComponent<Renderer>().bounds.size;
         Vector3 areaSize = areaObject.GetComponent<Renderer>().bounds.size;
 
-        // 计算 targetObject 的边界范围
+        // ???? targetObject ?????
         Vector3 targetMin = targetTransform.position - targetSize / 2f;
         Vector3 targetMax = targetTransform.position + targetSize / 2f;
 
-        // 计算 areaObject 的边界范围
+        // ???? areaObject ?????
         Vector3 areaMin = areaTransform.position - areaSize / 2f;
         Vector3 areaMax = areaTransform.position + areaSize / 2f;
 
-        // 检查 targetObject 是否完全位于 areaObject 的边界内
+        // ??? targetObject ????????? areaObject ??????
         if (targetMin.x >= areaMin.x && targetMin.y >= areaMin.y && targetMin.z >= areaMin.z &&
             targetMax.x <= areaMax.x && targetMax.y <= areaMax.y && targetMax.z <= areaMax.z)
         {
@@ -48,6 +48,6 @@ public class AreaDetector : MonoBehaviour
 
     private void ActivateTargetObject()
     {
-        menu.SetActive(true); // 激活目标物体
+        menu.SetActive(true); // ???????????
     }
 }

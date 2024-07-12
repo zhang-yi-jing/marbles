@@ -16,6 +16,9 @@ public class CollisionDetector : MonoBehaviour
     private float resistance;
     private bool isCW;//CW是顺时针，CCW是逆时针
 
+
+	private bool isCanPlay = true;
+
     private void Start()
     {
         // ��ȡ���ظýű��������Rigidbody2D���
@@ -29,7 +32,7 @@ public class CollisionDetector : MonoBehaviour
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // ��ȡ��������İ뾶
             enterVelocity = rb.velocity.magnitude;
-            resistance = enterVelocity + 3f;
+            resistance = enterVelocity + 4f;
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + ", Velocity: " + enterVelocity);
             //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
             // 获取物体相对于范围物体的相对位置坐标
@@ -85,20 +88,26 @@ public class CollisionDetector : MonoBehaviour
         {
             CalculateProximityPercentage();
         }
+		else
+		{
+			isCanPlay = true;
+		}
         
 
-        if (isInTriggerRange && Input.GetKeyDown(KeyCode.Space))
+        if (isInTriggerRange && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
             isSpace = true;
             if (!isRotating)
             {
+				AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3]);
+
                 // ���������ϵ�Rigidbody���
                 rb.isKinematic = true;
                 rb.velocity = Vector2.zero; // ���ٶ�����Ϊ��
                 RotateAroundColliderPosition();
                 //Debug.Log(rb.velocity);
             }
-
+			
             isRotating = !isRotating;
 
             if (!isRotating)
@@ -113,7 +122,13 @@ public class CollisionDetector : MonoBehaviour
         if (isRotating)
         {
             RotateAroundColliderPosition();            
+			AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[2]);
+
         }
+		else
+		{
+			AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[2]);
+		}
     }
 
     private void RotateAroundColliderPosition()
@@ -121,20 +136,21 @@ public class CollisionDetector : MonoBehaviour
         // ��ȡ�����иýű�������
         Transform thisTransform = transform;
 
+
         if (proximityPercentage <= 0.35f)
-        {
-            rotationSpeed = 90f;
-            tangentSpeed = 3f;
-        }
-        else if (proximityPercentage <= 0.55f)
         {
             rotationSpeed = 150f;
             tangentSpeed = 5f;
         }
+        else if (proximityPercentage <= 0.55f)
+        {
+            rotationSpeed = 220f;
+            tangentSpeed = 7f;
+        }
         else
         {
-            rotationSpeed = 240f;
-            tangentSpeed = 8f;
+            rotationSpeed = 280f;
+            tangentSpeed = 9f;
         }
         if (isCW)
         {
@@ -159,6 +175,15 @@ public class CollisionDetector : MonoBehaviour
 
         // ���ٷֱ�������0-100%֮��
         proximityPercentage = Mathf.Clamp(proximityPercentage, 0f, 1f);
+		//if proximityPercentage > 0.35f, PlayOneShot(AudioList.Instance.audioClips[0]);
+		if (proximityPercentage > 0.05f)
+		{
+			if (isCanPlay)
+			{
+				AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[1]);
+				isCanPlay = false;
+			}
+		} 
 
         // ����ٷֱ�
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
@@ -170,6 +195,7 @@ public class CollisionDetector : MonoBehaviour
 
     private void ApplyTangentVelocity()
     {
+		AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[0]);
         // �������߷���
         Vector2 tangentDirection = new Vector2(transform.position.y - colliderPosition.y, colliderPosition.x - transform.position.x).normalized;
         rb.gravityScale = 0.2f;
