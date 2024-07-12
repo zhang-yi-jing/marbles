@@ -9,8 +9,11 @@ public class CollisionDetector : MonoBehaviour
     private float triggerRadius = 0f; // ��������İ뾶
     private Rigidbody2D rb;
     private bool isShooting = false;
+    private bool isSpace = false;
     private float proximityPercentage;
     private float tangentSpeed;
+    private float enterVelocity;
+    private float resistance;
 
     private void Start()
     {
@@ -24,11 +27,14 @@ public class CollisionDetector : MonoBehaviour
             isInTriggerRange = true;
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // ��ȡ��������İ뾶
+            enterVelocity = rb.velocity.magnitude;
+            resistance = enterVelocity + 3f;
+            Debug.Log("Entered Trigger Range: " + other.gameObject.name + ", Velocity: " + enterVelocity);
             //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
             //Debug.Log(isInTriggerRange);
             //Debug.Log(isRotating);
             //Debug.Log(isShooting);
-            
+
         }
     }
 
@@ -36,10 +42,19 @@ public class CollisionDetector : MonoBehaviour
     {
         if (other.CompareTag("Trigger range"))
         {
-            Debug.Log("Exited Trigger Range: " + other.gameObject.name);
+            //Debug.Log("Exited Trigger Range: " + other.gameObject.name);
             isInTriggerRange = false;
             isShooting = false;
             tangentSpeed = 0f;
+            if (!isSpace)
+            {
+                //Debug.Log(111);
+                rb.drag = 0.2f;
+                rb.gravityScale = 0.2f;
+                rb.velocity = rb.velocity.normalized * enterVelocity;
+                isSpace = false;
+            }
+            isSpace = false;
         }
     }
 
@@ -53,13 +68,14 @@ public class CollisionDetector : MonoBehaviour
 
         if (isInTriggerRange && Input.GetKeyDown(KeyCode.Space))
         {
+            isSpace = true;
             if (!isRotating)
             {
                 // ���������ϵ�Rigidbody���
                 rb.isKinematic = true;
                 rb.velocity = Vector2.zero; // ���ٶ�����Ϊ��
                 RotateAroundColliderPosition();
-                Debug.Log(rb.velocity);
+                //Debug.Log(rb.velocity);
             }
 
             isRotating = !isRotating;
@@ -123,7 +139,7 @@ public class CollisionDetector : MonoBehaviour
         // ����ٷֱ�
         //Debug.Log("Proximity Percentage: " + (proximityPercentage * 100f) + "%");
 
-        float linearDrag = Mathf.Lerp(1f, 5f, proximityPercentage);
+        float linearDrag = Mathf.Lerp(1f, resistance, proximityPercentage);
         //Debug.Log(linearDrag);
         rb.drag = linearDrag;
     }
