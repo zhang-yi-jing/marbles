@@ -1208,6 +1208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd2b082a3777db4e936b7df32459929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inner_rotation: 280
+  inner_tangent: 9
+  middle_rotation: 220
+  middle_tangent: 5
+  outter_rotation: 150
+  outter_tangent: 3
 --- !u!1001 &1237297269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1221,11 +1227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5888105982750768522, guid: 4854a9bc825f18744911ed4e754e411f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.07
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 5888105982750768522, guid: 4854a9bc825f18744911ed4e754e411f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.822
+      value: -3.95
       objectReference: {fileID: 0}
     - target: {fileID: 5888105982750768522, guid: 4854a9bc825f18744911ed4e754e411f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2002,7 +2008,7 @@ SpriteMask:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8177471321811730583, guid: 87aaca0a643d54397ba969dab4fc8875, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 205c8ee6dbacb4650af5a540e5147c0a, type: 3}
   m_MaskAlphaCutoff: 1
   m_FrontSortingLayerID: 0
   m_BackSortingLayerID: 0
@@ -2021,7 +2027,7 @@ Transform:
   m_GameObject: {fileID: 1996039111}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.0026785631, z: 0}
-  m_LocalScale: {x: 0.4782183, y: 0.69504255, z: 9.9126}
+  m_LocalScale: {x: 0.010815964, y: 0.015719924, z: 0.22419536}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1955742579}

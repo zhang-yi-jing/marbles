@@ -24,13 +24,13 @@ public class AudioManager : MonosingletonTemp<AudioManager>
         return source;
     }
 
-    public void PlayAudio(AudioClip clip)
+    public void PlayAudio(AudioClip clip, bool isloop=true)
     {
         if (!IsPlaying(clip))
         {
             AudioSource source = GetOrCreateAudioSource(clip);
             source.clip = clip;
-            source.loop = true; // 确保音频在播放时循环
+            source.loop = isloop; // 确保音频在播放时循环
             source.Play();
         }
     }

@@ -16,7 +16,14 @@ public class CollisionDetector : MonoBehaviour
     private float resistance;
     private bool isCW;//CW是顺时针，CCW是逆时针
 
+	public float inner_rotation = 280f;
+	public float inner_tangent = 9f;
+	public float middle_rotation = 220f;
+	public float middle_tangent = 7f;
+	public float outter_rotation = 150f;
+	public float outter_tangent = 5f;
 
+    
 	private bool isCanPlay = true;
 
     private void Start()
@@ -32,7 +39,7 @@ public class CollisionDetector : MonoBehaviour
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // ��ȡ��������İ뾶
             enterVelocity = rb.velocity.magnitude;
-            resistance = enterVelocity + 4f;
+            resistance = enterVelocity + 3f;
             Debug.Log("Entered Trigger Range: " + other.gameObject.name + ", Velocity: " + enterVelocity);
             //Debug.Log("Entered Trigger Range: " + other.gameObject.name + " at position: " + colliderPosition + ", Radius: " + triggerRadius);
             // 获取物体相对于范围物体的相对位置坐标
@@ -84,6 +91,11 @@ public class CollisionDetector : MonoBehaviour
 
     private void Update()
     {
+		if(!isInTriggerRange)
+		{
+			AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[3]);
+		}
+		
         if (isInTriggerRange && !isRotating && !isShooting)
         {
             CalculateProximityPercentage();
@@ -99,7 +111,7 @@ public class CollisionDetector : MonoBehaviour
             isSpace = true;
             if (!isRotating)
             {
-				AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3]);
+				AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[3], false);
 
                 // ���������ϵ�Rigidbody���
                 rb.isKinematic = true;
@@ -139,18 +151,18 @@ public class CollisionDetector : MonoBehaviour
 
         if (proximityPercentage <= 0.35f)
         {
-            rotationSpeed = 150f;
-            tangentSpeed = 5f;
+            rotationSpeed = outter_rotation;
+            tangentSpeed = outter_tangent;
         }
         else if (proximityPercentage <= 0.55f)
         {
-            rotationSpeed = 220f;
-            tangentSpeed = 7f;
+            rotationSpeed = middle_rotation;
+            tangentSpeed = middle_tangent;
         }
         else
         {
-            rotationSpeed = 280f;
-            tangentSpeed = 9f;
+            rotationSpeed = inner_rotation;
+            tangentSpeed = inner_tangent;
         }
         if (isCW)
         {
