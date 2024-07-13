@@ -84,7 +84,7 @@ public class Camerainto : MonoBehaviour
         if (Mathf.Approximately(mainCamera.orthographicSize, cameraSizeTarget) && mainCamera.transform.position == targetPosition)
         {
             // ������ɣ�ֹͣ����
-            isTransitioning = false;
+            //isTransitioning = false;
         }
     }
 }
