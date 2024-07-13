@@ -7,7 +7,7 @@ public class CollisionDetector : MonoBehaviour
     public GameObject onTimeScaleEffect;
 	public GameObject onHitWall;
     public bool isInTriggerRange = false;
-    private Vector2 colliderPosition;
+    public Vector2 colliderPosition;
     private float rotationSpeed; // ÿ����ת�ĽǶ�
     private bool isRotating = false;
     private float triggerRadius = 0f; // ��������İ�?
@@ -28,6 +28,7 @@ public class CollisionDetector : MonoBehaviour
 	public float outter_tangent = 5f;
 
     private bool isCanPlay = true;
+    public bool isCamerainto;
 
     private void Start()
     {
@@ -39,6 +40,7 @@ public class CollisionDetector : MonoBehaviour
         if (other.CompareTag("Trigger range"))
         {
             isInTriggerRange = true;
+            isCamerainto = true;
             colliderPosition = other.transform.position;
             triggerRadius = other.bounds.extents.x; // ��ȡ��������İ�?
             enterVelocity = rb.velocity.magnitude;
@@ -87,6 +89,7 @@ public class CollisionDetector : MonoBehaviour
         {
             //Debug.Log("Exited Trigger Range: " + other.gameObject.name);
             isInTriggerRange = false;
+            isCamerainto = false;
             isShooting = false;
             tangentSpeed = 0f;
             if (!isSpace)
@@ -122,9 +125,11 @@ public class CollisionDetector : MonoBehaviour
         if (isInTriggerRange && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
             isSpace = true;
+            isCamerainto = false;
             if (!isRotating)
             {
                 AudioManager.Instance.PlayOneShot(AudioList.Instance.audioClips[3], true);
+                
                 ApplyParticle(onEnterEffect, false);
                 // ���������ϵ�Rigidbody���?
                 rb.isKinematic = true;

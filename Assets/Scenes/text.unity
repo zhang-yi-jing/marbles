@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 36626535}
   - component: {fileID: 36626534}
   - component: {fileID: 36626533}
+  - component: {fileID: 36626536}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -172,7 +173,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0
   far clip plane: 1000
   field of view: 60
   orthographic: 1
@@ -207,6 +208,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &36626536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36626532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7ca9633d7d7314aa7d1e89b65c74ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 36626534}
+  targetObject: {fileID: 1124406246}
 --- !u!1001 &133240897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1132,7 +1147,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 186817b8e5af0406dbc921e971207d9d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1213,12 +1228,14 @@ MonoBehaviour:
   onTimeScaleEffect: {fileID: 2079356957433038202, guid: e2d7a972faa766045b2a7237778890df, type: 3}
   onHitWall: {fileID: 2895836234584401446, guid: 2995597e469da45249c13237daa42073, type: 3}
   isInTriggerRange: 0
+  colliderPosition: {x: 0, y: 0}
   inner_rotation: 280
   inner_tangent: 9
   middle_rotation: 220
   middle_tangent: 5
   outter_rotation: 150
   outter_tangent: 3
+  isCamerainto: 0
 --- !u!1001 &1237297269
 PrefabInstance:
   m_ObjectHideFlags: 0
