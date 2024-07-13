@@ -55,7 +55,7 @@ public class Camerainto : MonoBehaviour
     {
         isTransitioning = true;
         targetPosition = initialCameraPosition; // ʹ��CollisionDetector�ű��е�colliderPosition��ΪĿ��λ��
-        cameraSizeTarget = 5f; // ������ĳ�ʼ��С
+        cameraSizeTarget = initialCameraSize; // ������ĳ�ʼ��С
 
     }
     private void TransitionCamera()
