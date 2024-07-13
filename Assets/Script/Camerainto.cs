@@ -2,31 +2,34 @@ using UnityEngine;
 
 public class Camerainto : MonoBehaviour
 {
-    public Camera mainCamera; // Ö÷ÉãÏñ»ú
+    public Camera mainCamera; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public GameObject targetObject;
-    private CollisionDetector collisionDetector; // CollisionDetector½Å±¾µÄÒýÓÃ
-    private Vector3 targetPosition; // Ä¿±êÎ»ÖÃ
+    private CollisionDetector collisionDetector; // CollisionDetectorï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private Vector3 targetPosition; // Ä¿ï¿½ï¿½Î»ï¿½ï¿½
 
-    private float cameraSizeTarget; // Ä¿±êÉãÏñ»úµÄorthographic size
-    private float cameraSizeTransitionSpeed = 5f; // ÉãÏñ»úorthographic sizeµÄ½¥±äËÙ¶È
-    private float positionTransitionSpeed = 20f; // Î»ÖÃµÄ½¥±äËÙ¶È
+    private float cameraSizeTarget; // Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½orthographic size
+    public float cameraSizeTransitionSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ï¿½orthographic sizeï¿½Ä½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+    public float positionTransitionSpeed = 20f; // Î»ï¿½ÃµÄ½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 
-    private bool isTransitioning = false; // ÊÇ·ñÕýÔÚ½øÐÐ½¥±ä
+    private bool isTransitioning = false; // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 
-    private Vector3 initialCameraPosition; // ÉãÏñ»úµÄ³õÊ¼Î»ÖÃ
+    private Vector3 initialCameraPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½Ê¼Î»ï¿½ï¿½
+    private float initialCameraSize;
 
     private void Start()
     {
-        // »ñÈ¡CollisionDetector½Å±¾µÄÒýÓÃ
+        // ï¿½ï¿½È¡CollisionDetectorï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         collisionDetector = targetObject.GetComponent<CollisionDetector>();
+        //Get initial camerasize
+        initialCameraSize = mainCamera.orthographicSize;
     }
 
     private void Update()
     {
-        // ¼ì²éCollisionDetector½Å±¾ÖÐµÄisCameraintoÖµ
+        // ï¿½ï¿½ï¿½CollisionDetectorï¿½Å±ï¿½ï¿½Ðµï¿½isCameraintoÖµ
         if (collisionDetector != null && collisionDetector.isCamerainto)
         {
-            // ¿ªÊ¼½¥±äÉãÏñ»úµÄorthographic sizeºÍÎ»ÖÃ
+            // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½orthographic sizeï¿½ï¿½Î»ï¿½ï¿½
             StartTransition();
         }
         else if(collisionDetector != null && !collisionDetector.isCamerainto)
@@ -34,7 +37,7 @@ public class Camerainto : MonoBehaviour
             EndTransition();
         }
 
-        // ½øÐÐÉãÏñ»ú½¥±ä
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (isTransitioning)
         {
             TransitionCamera();
@@ -44,21 +47,21 @@ public class Camerainto : MonoBehaviour
     private void StartTransition()
     {
         isTransitioning = true;
-        targetPosition = collisionDetector.colliderPosition; // Ê¹ÓÃCollisionDetector½Å±¾ÖÐµÄcolliderPosition×÷ÎªÄ¿±êÎ»ÖÃ
+        targetPosition = collisionDetector.colliderPosition; // Ê¹ï¿½ï¿½CollisionDetectorï¿½Å±ï¿½ï¿½Ðµï¿½colliderPositionï¿½ï¿½ÎªÄ¿ï¿½ï¿½Î»ï¿½ï¿½
         cameraSizeTarget = 2.5f;
     }
 
     private void EndTransition()
     {
         isTransitioning = true;
-        targetPosition = initialCameraPosition; // Ê¹ÓÃCollisionDetector½Å±¾ÖÐµÄcolliderPosition×÷ÎªÄ¿±êÎ»ÖÃ
-        cameraSizeTarget = 5f; // ÉãÏñ»úµÄ³õÊ¼´óÐ¡
+        targetPosition = initialCameraPosition; // Ê¹ï¿½ï¿½CollisionDetectorï¿½Å±ï¿½ï¿½Ðµï¿½colliderPositionï¿½ï¿½ÎªÄ¿ï¿½ï¿½Î»ï¿½ï¿½
+        cameraSizeTarget = 5f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½Ð¡
 
     }
     private void TransitionCamera()
     {
         float sizeLerpFactor;
-        if (cameraSizeTarget == 5f)
+        if (cameraSizeTarget == initialCameraSize)
         {
             float sizeProgress = Mathf.InverseLerp(cameraSizeTarget * 0.5f, cameraSizeTarget, mainCamera.orthographicSize);
             sizeLerpFactor =1f - Mathf.SmoothStep(0f, 1f, sizeProgress);
@@ -68,19 +71,19 @@ public class Camerainto : MonoBehaviour
             sizeLerpFactor = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(cameraSizeTarget * 0.5f, cameraSizeTarget, mainCamera.orthographicSize));
         }
 
-        // ½¥±äÉãÏñ»úµÄorthographic size
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½orthographic size
         mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, cameraSizeTarget, sizeLerpFactor * cameraSizeTransitionSpeed * Time.deltaTime);
 
-        // ¼ÆËãÉãÏñ»úorthographic sizeµÄ²åÖµÏµÊý
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½orthographic sizeï¿½Ä²ï¿½ÖµÏµï¿½ï¿½
         
 
-        // ½¥±äÉãÏñ»úµÄÎ»ÖÃ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
         mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, targetPosition, positionTransitionSpeed * Time.deltaTime);
 
-        // ¼ì²éÊÇ·ñÍê³É½¥±ä
+        // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½É½ï¿½ï¿½ï¿½
         if (Mathf.Approximately(mainCamera.orthographicSize, cameraSizeTarget) && mainCamera.transform.position == targetPosition)
         {
-            // ½¥±äÍê³É£¬Í£Ö¹½¥±ä
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½
             isTransitioning = false;
         }
     }
