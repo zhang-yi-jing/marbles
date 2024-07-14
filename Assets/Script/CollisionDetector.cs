@@ -14,7 +14,7 @@ public class CollisionDetector : MonoBehaviour
     private Rigidbody2D rb;
     private bool isShooting = false;
     private bool isSpace = false;
-    private float proximityPercentage;
+    public float proximityPercentage;
     private float tangentSpeed;
     private float enterVelocity;
     private float resistance;
@@ -29,6 +29,7 @@ public class CollisionDetector : MonoBehaviour
 
     private bool isCanPlay = true;
     public bool isCamerainto;
+    public GameObject menu;
 
     private void Start()
     {
@@ -37,6 +38,11 @@ public class CollisionDetector : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("DeadArea"))
+        {
+            menu.SetActive(true);
+            Time.timeScale = 0f;
+        }
         if (other.CompareTag("Trigger range"))
         {
             isInTriggerRange = true;
@@ -259,4 +265,7 @@ public class CollisionDetector : MonoBehaviour
         if (isParent)
             particle.transform.SetParent(transform);
     }
+
+
+
 }

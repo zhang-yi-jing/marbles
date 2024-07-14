@@ -5,6 +5,7 @@ public class SceneReloader : MonoBehaviour
 {
     public void ReloadScene()
     {
+        Time.timeScale = 1f;
         // 获取当前场景的索引
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
