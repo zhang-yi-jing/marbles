@@ -30,6 +30,8 @@ public class CollisionDetector : MonoBehaviour
     private bool isCanPlay = true;
     public bool isCamerainto;
     public GameObject menu;
+	public int message = 0;
+	public int m_messge;
 
     private void Start()
     {
@@ -116,11 +118,13 @@ public class CollisionDetector : MonoBehaviour
 		{
 			//AudioManager.Instance.KillthisAudio(AudioList.Instance.audioClips[3]);
 			Debug.Log("Kill");
+			message = 0;
 		}
 		
         if (isInTriggerRange && !isRotating && !isShooting)
         {
             CalculateProximityPercentage();
+			message = 1;
         }
         else
         {
@@ -159,12 +163,15 @@ public class CollisionDetector : MonoBehaviour
         if (isRotating)
         {
             RotateAroundColliderPosition();
+			message = 2;
             AudioManager.Instance.PlayAudio(AudioList.Instance.audioClips[2]);
         }
         else
         {
             AudioManager.Instance.StopAudio(AudioList.Instance.audioClips[2]);
         }
+
+		m_messge = message;
     }
 
     private void RotateAroundColliderPosition()
