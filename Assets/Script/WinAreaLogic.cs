@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class WinAreaLogic : MonoBehaviour
 {
+    public bool isSpecialWinArea = false;
+    public string nextSceneName;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,12 @@ public class WinAreaLogic : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (isSpecialWinArea)
+            {
+                SceneManager.LoadScene(nextSceneName);
+                return;
+            }
+            
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex + 1);
         }
